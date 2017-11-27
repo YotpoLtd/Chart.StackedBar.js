@@ -51,6 +51,9 @@
 		//Boolean - Show total legend
 		showTotal: false,
 
+		//Boolean - Show sum values in tooltip
+		showAggregateTooltip: false,
+
 		//String - Color of total legend
 		totalColor: '#fff',
 
@@ -308,6 +311,19 @@
 						};
 					}).call(this, dataIndex);
 
+					var tooltipLabelsToShow;
+					if (this.options.showAggregateTooltip) {
+						tooltipLabelsToShow = [];
+						var sumSoFar = 0;
+						tooltipLabels.reverse().forEach(function(currVal) {
+							sumSoFar += parseInt(currVal);
+							tooltipLabelsToShow.push('' + sumSoFar);
+						});
+						tooltipLabelsToShow = tooltipLabelsToShow.reverse();
+					} else {
+						tooltipLabelsToShow = tooltipLabels;
+					}
+
 					new Chart.MultiTooltip({
 						x: medianPosition.x,
 						y: medianPosition.y,
@@ -324,7 +340,7 @@
 						titleFontStyle: this.options.tooltipTitleFontStyle,
 						titleFontSize: this.options.tooltipTitleFontSize,
 						cornerRadius: this.options.tooltipCornerRadius,
-						labels: tooltipLabels,
+						labels: tooltipLabelsToShow,
 						legendColors: tooltipColors,
 						legendColorBackground : this.options.multiTooltipKeyBackground,
 						title: ChartElements[0].label,
